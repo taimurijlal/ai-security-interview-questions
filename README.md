@@ -1,5 +1,7 @@
 # AI Security Engineer Interview Questions (2026–2027)
 
+> 🎓 Want the full career path? Take **[The AI Security Engineer Career Masterclass](https://www.udemy.com/course/the-ai-security-engineer-career-masterclass/?referralCode=DA52F79319AE292A3696)** on Udemy.
+
 Ten scenario-based questions that keep coming up in AI Security Engineer and Agentic AI Security Engineer job descriptions, with model answers and diagrams.
 
 > Knowing AI security terminology and knowing how to secure an AI application are two very different things.
