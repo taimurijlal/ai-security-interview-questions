@@ -60,6 +60,12 @@ Document the architecture, trust boundaries, attack scenarios, findings and secu
 
 > Don't prepare for an AI Security Engineer interview by trying to sound like an AI expert. Prepare by becoming a security engineer who genuinely understands how AI systems work.
 
+## Go further: The AI Security Engineer Career Masterclass
+
+If you want a structured path from security fundamentals to the skills behind these ten questions, take my course on Udemy:
+
+👉 **[The AI Security Engineer Career Masterclass](https://www.udemy.com/course/the-ai-security-engineer-career-masterclass/?referralCode=DA52F79319AE292A3696)**
+
 ## References
 
 - [OWASP Top 10 for LLM Applications](https://genai.owasp.org/llm-top-10/)
