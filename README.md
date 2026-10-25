@@ -1,4 +1,4 @@
-# AI Security Engineer Interview Questions (2026)
+# AI Security Engineer Interview Questions (2026–2027)
 
 Ten scenario-based questions that keep coming up in AI Security Engineer and Agentic AI Security Engineer job descriptions, with model answers and diagrams.
 
