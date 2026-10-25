@@ -57,8 +57,6 @@ It's to establish practical, risk-based security gates that developers can maint
 
 A CI/CD pipeline containing conventional AppSec checks, AI-specific adversarial tests and deterministic permission-boundary tests that block unsafe changes.
 
-**In the lab:** [`.github/workflows/ai-security.yml`](../.github/workflows/ai-security.yml) runs a secrets scan, static analysis, the permission-boundary tests and the red-team suite on every push and pull request. `test_every_side_effecting_tool_needs_approval` fails the build if a developer adds a new write or external tool that could run without approval.
-
 ## Follow-ups to expect
 
 - How do you test a non-deterministic model in CI without flaky builds?

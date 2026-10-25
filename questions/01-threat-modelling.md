@@ -46,8 +46,6 @@ The interviewer wants to see whether you understand that distinction.
 
 A threat model showing the architecture, trust boundaries, realistic attack paths, risk ratings and recommended controls.
 
-**In the lab:** the [threat model](../lab/README.md#threat-model) for the lab's support agent maps six attack paths to their impact, control and test.
-
 ## Follow-ups to expect
 
 - Where exactly is the trust boundary between the retrieved context and the model?

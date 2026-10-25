@@ -48,12 +48,6 @@ An application can have excellent prompt injection defences and still expose con
 
 A RAG application with document-level permissions, synthetic confidential documents and tests proving that unauthorised users cannot retrieve protected content.
 
-**In the lab:** `alice` (support) asks about "salary bands". The vulnerable retriever returns the confidential HR document because it's the best match. The secure retriever filters by department *before* ranking, so the document never reaches the prompt. `bob` (HR) still gets it. Every document also carries provenance (`source="internal"` or `"external"`), which the agent uses to treat external content as untrusted.
-
-```bash
-cd lab && python -m unittest tests.test_rag_access -v
-```
-
 ## Follow-ups to expect
 
 - Why not just tell the model "don't reveal HR data"?

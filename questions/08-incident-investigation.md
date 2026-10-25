@@ -46,19 +46,6 @@ That makes application-level observability particularly important.
 
 A simulated incident investigation that reconstructs an unauthorised agent action, identifies its initiating input and explains which control failed.
 
-**In the lab:** the agent writes structured JSON audit events (`request`, `retrieval`, `tool_proposed`, `policy_decision`, `tool_executed`) that share a `trace_id`. The test replays the injection attack and rebuilds the story from the exported log alone:
-
-| Question | Answered by |
-| --- | --- |
-| Who asked, and what? | `request` event |
-| Which input influenced it? | `retrieval` event: the only external document, `sup-003` |
-| What did it try to do? | `tool_proposed`: `send_email` to `attacker@evil.example` |
-| Which control stopped it (or failed)? | `policy_decision` (secure) / `tool_executed` (vulnerable) |
-
-```bash
-cd lab && python -m unittest tests.test_incident_trace -v
-```
-
 ## Follow-ups to expect
 
 - How long would you keep full prompt and response logs, and who can read them?

@@ -1,6 +1,6 @@
 # AI Security Engineer Interview Questions (2026)
 
-Ten scenario-based questions that keep coming up in AI Security Engineer and Agentic AI Security Engineer job descriptions, with model answers, diagrams, and a small runnable lab you can use as your "show, don't tell" evidence.
+Ten scenario-based questions that keep coming up in AI Security Engineer and Agentic AI Security Engineer job descriptions, with model answers and diagrams.
 
 > Knowing AI security terminology and knowing how to secure an AI application are two very different things.
 
@@ -27,43 +27,34 @@ These aren't all dedicated AI Security Engineer roles, but they show AI security
 
 ## The 10 questions
 
-| # | Question | Diagram | Lab evidence |
-| --- | --- | --- | --- |
-| 1 | [How would you threat model an AI application?](questions/01-threat-modelling.md) | <img src="assets/01-threat-model.webp" width="220"> | [Threat model](lab/README.md#threat-model) |
-| 2 | [What is prompt injection, and how would you prevent it?](questions/02-prompt-injection.md) | <img src="assets/02-prompt-injection.webp" width="220"> | `test_prompt_injection.py` |
-| 3 | [How would you secure a RAG application?](questions/03-rag-security.md) | <img src="assets/03-rag-security.webp" width="220"> | `test_rag_access.py` |
-| 4 | [How would you secure an AI agent with access to tools?](questions/04-agent-tool-access.md) | <img src="assets/04-agent-tool-access.webp" width="220"> | `test_agent_permissions.py` |
-| 5 | [What security risks does MCP introduce?](questions/05-mcp-security.md) | <img src="assets/05-mcp-integration-security.webp" width="220"> | `test_tool_inputs.py` |
-| 6 | [How would you perform AI red teaming?](questions/06-ai-red-teaming.md) | <img src="assets/06-ai-red-teaming.webp" width="220"> | `python -m secure_agent.redteam` |
-| 7 | [How would you secure AI models and data in the cloud?](questions/07-cloud-ai-security.md) | <img src="assets/07-ai-application-in-aws.webp" width="220"> | [AWS review checklist](questions/07-cloud-ai-security.md#review-checklist) |
-| 8 | [How would you detect and investigate an AI security incident?](questions/08-incident-investigation.md) | <img src="assets/08-incident-investigation.webp" width="220"> | `test_incident_trace.py` |
-| 9 | [How would you integrate AI security into CI/CD?](questions/09-ai-security-cicd.md) | <img src="assets/09-ai-security-in-cicd.webp" width="220"> | [`.github/workflows/ai-security.yml`](.github/workflows/ai-security.yml) |
-| 10 | [How would you explain AI security risk to senior leadership?](questions/10-explaining-risk-to-leadership.md) | <img src="assets/10-explaining-risk-to-leadership.webp" width="220"> | [Risk memo example](questions/10-explaining-risk-to-leadership.md#example-risk-memo) |
+| # | Question | Diagram |
+| --- | --- | --- |
+| 1 | [How would you threat model an AI application?](questions/01-threat-modelling.md) | <img src="assets/01-threat-model.webp" width="220"> |
+| 2 | [What is prompt injection, and how would you prevent it?](questions/02-prompt-injection.md) | <img src="assets/02-prompt-injection.webp" width="220"> |
+| 3 | [How would you secure a RAG application?](questions/03-rag-security.md) | <img src="assets/03-rag-security.webp" width="220"> |
+| 4 | [How would you secure an AI agent with access to tools?](questions/04-agent-tool-access.md) | <img src="assets/04-agent-tool-access.webp" width="220"> |
+| 5 | [What security risks does MCP introduce?](questions/05-mcp-security.md) | <img src="assets/05-mcp-integration-security.webp" width="220"> |
+| 6 | [How would you perform AI red teaming?](questions/06-ai-red-teaming.md) | <img src="assets/06-ai-red-teaming.webp" width="220"> |
+| 7 | [How would you secure AI models and data in the cloud?](questions/07-cloud-ai-security.md) | <img src="assets/07-ai-application-in-aws.webp" width="220"> |
+| 8 | [How would you detect and investigate an AI security incident?](questions/08-incident-investigation.md) | <img src="assets/08-incident-investigation.webp" width="220"> |
+| 9 | [How would you integrate AI security into CI/CD?](questions/09-ai-security-cicd.md) | <img src="assets/09-ai-security-in-cicd.webp" width="220"> |
+| 10 | [How would you explain AI security risk to senior leadership?](questions/10-explaining-risk-to-leadership.md) | <img src="assets/10-explaining-risk-to-leadership.webp" width="220"> |
 
 Each question page has the same shape:
 
 1. **The mistake candidates make**: the answer that sounds fine but doesn't land.
 2. **How I'd answer**: a worked scenario, out loud, starting from the architecture.
 3. **Why this is a stronger answer**: what the interviewer is really testing.
-4. **What I'd demonstrate**: the concrete artefact that proves you can do it, and where the lab shows it.
+4. **What I'd demonstrate**: the concrete artefact that proves you can do it.
 5. **Follow-ups to expect**: where a good interviewer will push next.
 
-## The lab: one project, ten answers
+## The most important preparation advice
 
-The single best piece of prep: build **one** realistic AI application with an LLM, RAG, tools and an agent. Deliberately introduce weaknesses, exploit them in a controlled environment, then fix them.
+Don't spend all your time memorising definitions. Build **one** realistic AI application that combines an LLM, RAG, MCP and an agent that can call tools.
 
-[`lab/`](lab/) is a minimal, dependency-free version of that project. It runs the same agent in two modes:
+Then deliberately introduce security weaknesses, show how they could be exploited in a controlled environment, and put the right safeguards in place.
 
-- `secure=False`: the naive build. Prompt injection exfiltrates data, retrieval ignores permissions, tools run unchecked.
-- `secure=True`: controls enforced **outside the model**. Retrieval-time ACLs, scoped agent identity, a policy engine, taint tracking for untrusted content, recipient allowlists, human approval and an audit trail.
-
-```bash
-cd lab
-python -m secure_agent.redteam          # attack table: vulnerable vs secure
-python -m unittest discover -s tests -t .
-```
-
-The model in the lab is a deterministic stand-in that **obeys any instructions it reads**. That's deliberate: the controls have to hold even when the model is fully compromised.
+Document the architecture, trust boundaries, attack scenarios, findings and security improvements. That single project gives you practical examples for almost every question above. It also demonstrates the capabilities that keep appearing in job descriptions: security engineering, threat modelling, secure coding, testing, cloud security and AI-specific risk assessment.
 
 ## Final advice
 

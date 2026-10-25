@@ -50,12 +50,6 @@ That's why I'd assess the entire integration rather than treating the protocol i
 
 An MCP integration with scoped credentials, server-side authorisation, input validation and audit logging, along with tests showing that unauthorised operations are rejected.
 
-**In the lab:** each tool is modelled like an MCP tool, with a name, a required scope, a side-effect class and an input validator. Unknown tools are denied. `lookup_customer` only accepts IDs like `C0001`, so payloads such as `C0001;DROP` are rejected before the tool runs. Every decision is written to the audit log.
-
-```bash
-cd lab && python -m unittest tests.test_tool_inputs -v
-```
-
 ## Follow-ups to expect
 
 - How would you vet a third-party MCP server before allowing it?

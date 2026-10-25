@@ -52,18 +52,6 @@ That allows organisations to benefit from automation without granting agents unr
 
 An agent that can autonomously perform approved read-only operations but requires independently enforced approval before making privileged changes.
 
-**In the lab:**
-
-- `lookup_customer` (read) runs straight away, with no approval needed.
-- `delete_record` (write) is denied unless a human approver says yes.
-- `send_email` to a non-allowlisted domain is denied **even with approval**.
-- An agent identity without the `records:write` scope can't delete, whoever approves.
-- A request that tries to call tools over and over is cut off at the per-request budget.
-
-```bash
-cd lab && python -m unittest tests.test_agent_permissions -v
-```
-
 ## Follow-ups to expect
 
 - Where does the policy engine run, and what stops the agent bypassing it?
