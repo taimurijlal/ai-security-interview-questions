@@ -42,9 +42,11 @@ These aren't all dedicated AI Security Engineer roles, but they show AI security
 
 Each question page has the same shape:
 
-1. **The answer**: how to approach it out loud.
-2. **What I'd demonstrate**: the concrete artefact that proves you can do it.
-3. **Follow-ups to expect**: where a good interviewer will push next.
+1. **The mistake candidates make**: the answer that sounds fine but doesn't land.
+2. **How I'd answer**: a worked scenario, out loud, starting from the architecture.
+3. **Why this is a stronger answer**: what the interviewer is really testing.
+4. **What I'd demonstrate**: the concrete artefact that proves you can do it, and where the lab shows it.
+5. **Follow-ups to expect**: where a good interviewer will push next.
 
 ## The lab: one project, ten answers
 

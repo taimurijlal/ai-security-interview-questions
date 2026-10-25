@@ -2,29 +2,55 @@
 
 ![MCP integration security](../assets/05-mcp-integration-security.webp)
 
-## The answer
+## The mistake candidates make
 
-The Model Context Protocol (MCP) lets AI applications connect to tools and external capabilities through a standard client/server interface.
+Some candidates talk about MCP as though it's inherently insecure.
 
-**The protocol itself isn't automatically insecure.** The risk depends on how servers, tools, credentials and trust relationships are implemented. What to examine:
+Others explain how the protocol works but never discuss authentication, authorisation or the trust relationships between the AI application and connected servers.
 
-| Risk | What it looks like |
-| --- | --- |
-| Malicious tool responses | A server returns text containing instructions: indirect prompt injection via tools |
-| Overly broad permissions | A "database" MCP server connecting with a full read/write admin account |
-| Credential exposure | Tokens in config files, passed through to the model, or shared across users |
-| Unauthorised tool invocation | The model calls a tool the user never intended, or with attacker-supplied arguments |
-| Third-party server trust | An unvetted external server; tool descriptions that change after approval |
+Knowing how to connect an MCP server isn't the same as knowing how to secure one.
 
-Concrete example: **an MCP server offering database access shouldn't automatically inherit unrestricted database permissions.** Give it a dedicated, read-only, schema-limited credential, and validate every argument it receives.
+## How I'd answer
 
-Controls: an allowlist of approved servers, pinned versions, scoped per-server credentials, schema validation on tool inputs, tool responses treated as untrusted content, and auditing of every invocation.
+I'd explain that the Model Context Protocol provides a standardised way for AI applications to interact with external tools and data sources.
+
+The security implications depend on how those integrations are implemented.
+
+For example, imagine an organisation connects its AI assistant to three MCP servers.
+
+One provides access to internal documentation, another integrates with a ticketing platform and the third can query a production database.
+
+I'd start by understanding who operates each server, how the client authenticates and what permissions the server has.
+
+I'd also examine the trustworthiness of tool descriptions and responses.
+
+A malicious or compromised MCP server could provide misleading tool metadata or return content containing instructions intended to manipulate the AI application.
+
+I'd assess whether the application distinguishes untrusted tool output from trusted instructions.
+
+Then I'd examine the controls around tool execution.
+
+Does the server validate the caller's permissions? Are tool arguments validated? Are credentials properly scoped? Can sensitive information be sent to unapproved destinations?
+
+For the database integration, I'd ensure the MCP server uses appropriately restricted credentials and independently checks whether a requested operation is authorised.
+
+I'd also implement logging, approved server registries and appropriate monitoring.
+
+## Why this is a stronger answer
+
+MCP simplifies connectivity between AI applications and external systems.
+
+But every new integration introduces a trust relationship that needs to be understood and controlled.
+
+An AI application might be securely configured while relying on an external MCP server with excessive database permissions.
+
+That's why I'd assess the entire integration rather than treating the protocol itself as the security boundary.
 
 ## What I'd demonstrate
 
-An MCP integration with scoped credentials, validated tool inputs and auditable tool execution.
+An MCP integration with scoped credentials, server-side authorisation, input validation and audit logging, along with tests showing that unauthorised operations are rejected.
 
-The lab models each tool like an MCP tool: a name, a required scope, a side-effect class and an input validator. `lookup_customer` only accepts IDs matching `C` plus four digits. Injection payloads such as `C0001;DROP` are rejected before the tool runs, and every decision is written to the audit log.
+**In the lab:** each tool is modelled like an MCP tool, with a name, a required scope, a side-effect class and an input validator. Unknown tools are denied. `lookup_customer` only accepts IDs like `C0001`, so payloads such as `C0001;DROP` are rejected before the tool runs. Every decision is written to the audit log.
 
 ```bash
 cd lab && python -m unittest tests.test_tool_inputs -v

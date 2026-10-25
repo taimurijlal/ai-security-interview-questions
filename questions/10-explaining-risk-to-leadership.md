@@ -2,45 +2,75 @@
 
 ![Explaining AI risk to leadership](../assets/10-explaining-risk-to-leadership.webp)
 
-## The answer
+## The mistake candidates make
 
-This question is often underestimated. A technically excellent engineer still has to explain **why a vulnerability matters**.
+The biggest mistake here is answering a business question with a technical explanation.
 
-Don't discuss prompt injection in isolation. Translate it into a **business scenario**:
+You might spend ten minutes describing prompt injection, LLM vulnerabilities and agentic attack techniques without ever explaining what the organisation should be worried about.
 
-> Our support agent can read confidential customer information and send emails externally. An attacker could plant text in a support article that manipulates the agent into emailing customer data to an outside address.
+Another mistake is presenting every vulnerability as critical without considering likelihood, impact or existing controls.
 
-Then cover, in plain language:
+Senior leadership needs information that supports decisions.
 
-1. **Likelihood**: how realistic is it? Who could do it, and how hard is it?
-2. **Impact**: data exposure, regulatory notification (e.g. GDPR), reputational damage, cost.
-3. **Existing controls**: what already reduces the risk?
-4. **Recommended treatment**: what you propose, what it costs, how long it takes.
-5. **Residual risk**: what remains after the fix, and whether it's within appetite.
+## How I'd answer
 
-The outcome leadership needs: an **informed decision**, a risk they can **accept** with eyes open, and a route to **secure AI adoption**, not a reason to say "no".
+I'd start with the business scenario rather than the vulnerability name.
 
-## Example risk memo
+Suppose we've identified an AI agent that can retrieve confidential customer information and send emails through an external integration.
 
-> **Subject: Risk decision needed — customer support AI agent**
->
-> **Scenario.** The new support agent can read customer records and send email. Content from outside the company (customer-submitted articles) can influence what it does. An attacker could use this to make it email customer data to an external address.
->
-> **Likelihood: Medium.** The technique is public and needs no special access. It needs someone to get content into our knowledge base, which today any customer can do.
->
-> **Impact: High.** Disclosure of customer personal data; likely regulatory notification; reputational harm.
->
-> **Existing controls.** Staff review outgoing complaints; email is logged.
->
-> **Recommendation.** Before launch: (1) block the agent from sending email to non-company domains; (2) require staff approval for any email the agent drafts after reading external content; (3) restrict what customer data the agent can retrieve. About two engineering weeks.
->
-> **Residual risk: Low.** The agent may still give wrong *answers* influenced by bad content, but it can no longer move data out of the company on its own. We recommend accepting this and reviewing again in six months.
->
-> **Decision needed:** approve the launch with these controls, or delay.
+During testing, we demonstrate that attacker-controlled content could influence the agent into attempting to send sensitive information to an unauthorised recipient.
+
+I wouldn't begin by explaining how prompt injection works.
+
+I'd explain the business risk.
+
+> "Our customer support AI assistant has access to sensitive customer records and can communicate with external systems. We've identified a weakness that could allow malicious content to influence its actions, creating a potential route for unauthorised data disclosure."
+
+Then I'd explain the conditions required for the attack to succeed, the information potentially affected and the existing controls.
+
+I'd describe the potential impact, including customer harm, operational consequences and any relevant regulatory obligations.
+
+Next, I'd present practical treatment options.
+
+We could restrict the agent's permissions, prevent communication with unapproved destinations and require authorisation for sensitive operations.
+
+I'd also explain the trade-offs.
+
+For example, requiring human approval for every low-risk action could undermine the productivity benefits of the agent.
+
+A more proportionate approach might allow approved read-only operations to run automatically while requiring independent approval for sensitive actions.
+
+Finally, I'd explain the residual risk and what decision leadership needs to make.
+
+## Why this is a stronger answer
+
+Senior leadership doesn't need to become expert in prompt injection to make an informed security decision.
+
+They need to understand what could happen, how serious the consequences might be, what controls are available and what those controls will cost or change.
+
+That's the difference between identifying a technical vulnerability and managing a business risk.
 
 ## What I'd demonstrate
 
-A concise risk assessment that connects an AI security weakness to a business outcome and a defensible remediation decision.
+A concise AI security risk assessment showing the business scenario, potential impact, existing safeguards, recommended treatment and residual risk.
+
+## Example risk memo
+
+> **Subject: Risk decision needed — customer support AI assistant**
+>
+> **Scenario.** Our customer support AI assistant has access to sensitive customer records and can communicate with external systems. During testing we showed that content from outside the company could influence it into trying to email customer data to an unauthorised recipient.
+>
+> **Conditions for the attack.** The attacker needs to get content in front of the assistant, for example through a customer-submitted article. Today any customer can do this.
+>
+> **Likelihood: Medium. Impact: High.** Customer personal data could be disclosed, causing customer harm, a likely regulatory notification and reputational damage.
+>
+> **Existing safeguards.** Outgoing email is logged; staff review escalated tickets.
+>
+> **Recommended treatment.** (1) Block the assistant from emailing unapproved destinations. (2) Require independent approval for sensitive actions such as sending data or changing records. (3) Let approved read-only operations keep running automatically, so we keep the productivity benefit. About two engineering weeks.
+>
+> **Residual risk: Low.** Malicious content could still produce a misleading *answer*, but the assistant can no longer move customer data out of the company on its own. We recommend accepting this and reviewing again in six months.
+>
+> **Decision needed:** approve launch with these controls, or delay.
 
 ## Follow-ups to expect
 

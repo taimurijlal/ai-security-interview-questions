@@ -2,38 +2,58 @@
 
 ![AI security incident investigation](../assets/08-incident-investigation.webp)
 
-## The answer
+## The mistake candidates make
 
-Start by identifying the **telemetry** you need. Traditional application logs may show *that* an agent did something, but not *why*.
+One mistake is assuming traditional application logs will always provide enough information to investigate AI-related incidents.
 
-For AI systems you need visibility into:
+Another is focusing on finding the malicious prompt while ignoring the actual actions performed by the application.
 
-| Source | Answers |
-| --- | --- |
-| Application logs | Who made the request, when, from where |
-| LLM interactions | The user request, retrieved context, model output (where appropriate) |
-| Tool execution logs | Which tools were proposed, allowed, denied and executed, with which arguments |
-| API / cloud logs | What actually changed in downstream systems (CloudTrail etc.) |
-| Identity logs | Which identity/credential was used, and what it was allowed to do |
+A prompt injection attempt isn't automatically a security incident. The important questions are what happened, what was affected and which controls failed.
 
-All of it tied together with a **correlation / trace ID** per request.
+## How I'd answer
 
-Example: an agent unexpectedly accesses sensitive customer records. The investigation reconstructs:
+I'd start with containment and understanding the impact.
 
-1. **The initiating input**: which user request started it?
-2. **The influence**: which input or retrieved document steered the behaviour?
-3. **The enabling permission**: which identity and permission allowed the action?
-4. **The impact**: which resources were touched, and was data exfiltrated?
+Suppose an AI agent unexpectedly retrieves confidential customer records and attempts to send them to an external service.
 
-Then contain (revoke the agent's credentials, quarantine the poisoned document, disable the tool) and remediate the root cause.
+I'd first determine whether the data actually left the environment, which records were affected and whether the agent is still capable of performing similar actions.
 
-**Preserve evidence while respecting privacy and data-retention requirements.** Prompt logs are often sensitive data in their own right.
+Where necessary, I'd restrict the relevant tool, revoke credentials or temporarily suspend the agent.
+
+Then I'd reconstruct the sequence of events.
+
+I'd correlate user requests, retrieved documents, model interaction records where available, tool invocations, identity activity and cloud or application logs.
+
+For example, I'd want to know whether the agent received malicious instructions through a retrieved document, which tool it subsequently invoked and which permissions allowed that invocation to succeed.
+
+I'd preserve evidence in accordance with the organisation's incident response and privacy requirements.
+
+Once the immediate impact was understood, I'd identify the root cause.
+
+Was it excessive tool permissions? A failed authorisation control? A compromised MCP server? An application workflow that treated untrusted content as instructions?
+
+Finally, I'd address the underlying weakness and create regression tests to prevent recurrence.
+
+## Why this is a stronger answer
+
+Investigating AI incidents may require understanding not only what a system did but also which inputs influenced its behaviour.
+
+Traditional telemetry remains essential, but it may not provide the full context of an agent's decision-making and tool execution sequence.
+
+That makes application-level observability particularly important.
 
 ## What I'd demonstrate
 
-An incident investigation that traces an unauthorised action from its initiating input to the affected resource.
+A simulated incident investigation that reconstructs an unauthorised agent action, identifies its initiating input and explains which control failed.
 
-The lab writes structured JSON audit events (`request`, `retrieval`, `tool_proposed`, `policy_decision`, `tool_executed`) with a shared `trace_id`. The test replays the injection attack and reconstructs the root cause from the log alone: the attempted `send_email` traces back to document `sup-003` from an external source.
+**In the lab:** the agent writes structured JSON audit events (`request`, `retrieval`, `tool_proposed`, `policy_decision`, `tool_executed`) that share a `trace_id`. The test replays the injection attack and rebuilds the story from the exported log alone:
+
+| Question | Answered by |
+| --- | --- |
+| Who asked, and what? | `request` event |
+| Which input influenced it? | `retrieval` event: the only external document, `sup-003` |
+| What did it try to do? | `tool_proposed`: `send_email` to `attacker@evil.example` |
+| Which control stopped it (or failed)? | `policy_decision` (secure) / `tool_executed` (vulnerable) |
 
 ```bash
 cd lab && python -m unittest tests.test_incident_trace -v

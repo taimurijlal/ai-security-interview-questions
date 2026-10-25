@@ -2,34 +2,53 @@
 
 ![RAG application security](../assets/03-rag-security.webp)
 
-## The answer
+## The mistake candidates make
 
-RAG adds attack surface beyond the LLM:
+A common mistake is focusing entirely on the LLM while ignoring the retrieval system.
 
-- **Documents** can contain malicious instructions (poisoning, indirect injection).
-- **Retrieval** can expose information across users, departments or tenants.
-- **Vector databases** can be misconfigured: public endpoints, shared indexes, no auth.
-- **Embeddings** are derived from sensitive text and need the same protection as the source.
+Candidates might discuss prompt injection and hallucinations without examining how documents enter the knowledge base, who can access them or how retrieval permissions are enforced.
 
-Focus areas:
+Another mistake is assuming that because information is stored in a vector database, conventional access-control requirements somehow don't apply.
 
-| Area | Control |
-| --- | --- |
-| Document ingestion | Validate sources, record provenance and owner, scan for embedded instructions, restrict who can add content |
-| Access control | Carry document ACLs into the index; filter **at retrieval time** using the caller's identity |
-| Tenant isolation | Separate indexes or mandatory tenant filters that application code can't skip |
-| Retrieval filtering | Drop documents the user can't read *before* they reach the prompt, not after the answer |
-| Monitoring | Log which documents were retrieved for which user and request |
+## How I'd answer
 
-The rule to state clearly: **a user from Department A should never retrieve confidential documents from Department B, even when those documents are semantically relevant to their question.** Relevance is not authorisation.
+I'd begin by understanding the RAG architecture.
 
-Also test whether poisoned documents can influence the application's behaviour.
+Where do the documents come from? Who can upload or modify them? How are they processed, embedded, stored and retrieved?
+
+Then I'd focus on two important areas: protecting the integrity of retrieved content and preventing unauthorised information access.
+
+For example, imagine an organisation has built an internal assistant containing HR, finance and engineering documents.
+
+An employee from the engineering department asks a question, and the retrieval system identifies a highly relevant confidential HR document.
+
+The fact that the document is relevant doesn't mean the employee should be allowed to access it.
+
+I'd enforce document-level access controls based on the authenticated user's permissions. Those controls must be applied during retrieval, not left to the LLM to decide whether information should be disclosed.
+
+I'd also protect the document ingestion pipeline.
+
+Could an attacker upload a poisoned document containing malicious instructions? Could someone alter existing documents without approval? Are documents from external sources treated differently from trusted internal content?
+
+I'd introduce appropriate ingestion controls, provenance tracking, retrieval filtering, tenant isolation and monitoring.
+
+Finally, I'd test whether users can retrieve information outside their permissions and whether malicious documents can influence the application's behaviour.
+
+## Why this is a stronger answer
+
+RAG security isn't just an LLM security problem.
+
+It's also a data security, access-control and application security problem.
+
+**Semantic similarity doesn't equal authorisation.**
+
+An application can have excellent prompt injection defences and still expose confidential information because its retrieval permissions are poorly designed.
 
 ## What I'd demonstrate
 
-A RAG application with document-level permissions, adversarial test cases and evidence that access controls are enforced during retrieval.
+A RAG application with document-level permissions, synthetic confidential documents and tests proving that unauthorised users cannot retrieve protected content.
 
-In the lab, `alice` (support) asks about "salary bands". The vulnerable retriever returns the confidential HR document because it's the best match. The secure retriever filters by department before ranking, so the HR document never enters the prompt. `bob` (HR) still gets it.
+**In the lab:** `alice` (support) asks about "salary bands". The vulnerable retriever returns the confidential HR document because it's the best match. The secure retriever filters by department *before* ranking, so the document never reaches the prompt. `bob` (HR) still gets it. Every document also carries provenance (`source="internal"` or `"external"`), which the agent uses to treat external content as untrusted.
 
 ```bash
 cd lab && python -m unittest tests.test_rag_access -v
